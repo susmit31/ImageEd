@@ -1,0 +1,53 @@
+<html>
+	<head>
+		<title>Resize Image</title>
+	</head>
+	
+	<body>
+		<div id="form">
+			<div class="formLabel">Output width</div>
+			<input type='number' id="width" value='0'>
+			<div class="formLabel">Output height</div>
+			<input type='number' id="height" value='0'>
+			
+			<div class="formLabel">Select a file</div>
+			<input type="file">
+			
+			<img src="#" id="myImg">
+		</div>
+		<canvas id='canvas' width='200'></canvas>
+		<button style="display:none"></button>
+		<script>
+				let imgfile = document.querySelector(`input[type='file']`);
+				imgfile.addEventListener('change', ()=>{
+					let url = URL.createObjectURL(imgfile.files[0]);
+					let img = document.querySelector('img');
+					img.src = url;
+					img.style.display='none';
+					
+					let target_wd = document.getElementById('width').value;
+					let target_ht = document.getElementById('height').value;
+					console.log(target_wd+' '+target_ht);
+					
+					var oc = document.getElementById('canvas');
+					var octx = oc.getContext('2d');
+
+					oc.width = parseInt(target_wd);
+					oc.height = parseInt(target_ht);
+					console.log(oc.width+' '+oc.height);
+					img.onload = ()=>{
+						octx.clearRect(0,0,oc.width,oc.height);
+						octx.drawImage(img, 0, 0,oc.width,oc.height);
+					}
+
+					let saveurl = oc.toDataURL('image/jpeg',1);
+					
+					let btn = document.querySelector('button');
+					btn.style.display='block';
+					btn.innerHTML = `<a href="${saveurl}" download>Save Image</a>`;
+				});
+				
+		</script>
+	</body>
+</html>
+	
